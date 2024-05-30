@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/services/customer/customer.iml" filepath="$PROJECT_DIR$/services/customer/customer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/services/discovery/discovery.iml" filepath="$PROJECT_DIR$/services/discovery/discovery.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/e-commerce-app.iml" filepath="$PROJECT_DIR$/.idea/e-commerce-app.iml" />
     </modules>
   </component>
