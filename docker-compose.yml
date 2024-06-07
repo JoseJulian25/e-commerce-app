@@ -39,6 +39,18 @@ services:
       - ME_CONFIG_MONGODB_SERVER=mongodb
       - ME_CONFIG_BASICAUTH=false
 
+  mysql:
+    image: mysql
+    container_name: ms_mysql_db
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: jose1234
+    restart: unless-stopped
+    networks:
+      - microservices-net
 
   mail-dev:
     container_name: ms_mail_dev
@@ -55,3 +67,4 @@ networks:
 volumes:
   postgres:
   mongo:
+  mysql:
