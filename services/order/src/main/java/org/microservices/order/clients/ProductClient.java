@@ -3,7 +3,7 @@ package org.microservices.order.clients;
 import lombok.RequiredArgsConstructor;
 import org.microservices.order.DTO.PurchaseResponse;
 import org.microservices.order.exception.BusinessException;
-import org.microservices.order.product.PurchaseRequest;
+import org.microservices.order.DTO.PurchaseRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -22,7 +22,7 @@ public class ProductClient {
 
     @Value("${application.config.product-url}")
     private String productUrl;
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     public List<PurchaseResponse> purchaseProducts(List<PurchaseRequest> requestBody){
         HttpHeaders headers = new HttpHeaders();
@@ -30,7 +30,7 @@ public class ProductClient {
 
         HttpEntity<List<PurchaseRequest>> requestEntity = new HttpEntity<>(requestBody, headers);
         ParameterizedTypeReference<List<PurchaseResponse>> responseType =
-                new ParameterizedTypeReference<List<PurchaseResponse>>(){};
+                new ParameterizedTypeReference<>(){};
 
         ResponseEntity<List<PurchaseResponse>> responseEntity =
                 restTemplate.exchange(productUrl + "/purchase", POST, requestEntity, responseType );
