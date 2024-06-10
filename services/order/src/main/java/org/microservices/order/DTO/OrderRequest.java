@@ -2,7 +2,7 @@ package org.microservices.order.DTO;
 
 import jakarta.validation.constraints.*;
 import org.microservices.order.entities.PaymentMethod;
-import org.microservices.order.product.PurchaseRequest;
+
 import java.math.BigDecimal;
 import java.util.List;
 

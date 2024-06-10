@@ -9,7 +9,7 @@ import org.microservices.order.clients.ProductClient;
 import org.microservices.order.entities.Order;
 import org.microservices.order.exception.BusinessException;
 import org.microservices.order.mapper.OrderMapper;
-import org.microservices.order.product.PurchaseRequest;
+import org.microservices.order.DTO.PurchaseRequest;
 import org.microservices.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
