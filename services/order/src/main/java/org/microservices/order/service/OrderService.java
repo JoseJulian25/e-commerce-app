@@ -1,17 +1,18 @@
 package org.microservices.order.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.microservices.order.DTO.CustomerResponse;
-import org.microservices.order.DTO.OrderLineRequest;
-import org.microservices.order.DTO.OrderRequest;
+import org.microservices.order.DTO.*;
 import org.microservices.order.clients.CustomerClient;
 import org.microservices.order.clients.ProductClient;
 import org.microservices.order.entities.Order;
 import org.microservices.order.exception.BusinessException;
+import org.microservices.order.kafka.OrderProducer;
 import org.microservices.order.mapper.OrderMapper;
-import org.microservices.order.DTO.PurchaseRequest;
 import org.microservices.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +23,13 @@ public class OrderService {
     private final ProductClient productClient;
     private final OrderMapper orderMapper;
     private final OrderLineService orderLineService;
+    private final OrderProducer orderProducer;
 
     public Integer createdOrder(OrderRequest request) {
         CustomerResponse customer = this.customerClient.findCustomerById(request.customerId())
                 .orElseThrow(() -> new BusinessException("No customer exists with the provide id: " + request.customerId()));
 
-        this.productClient.purchaseProducts(request.products());
+        List<PurchaseResponse> purchaseProducts =  this.productClient.purchaseProducts(request.products());
 
         Order order = this.orderRepository.save(orderMapper.toOrder(request));
 
@@ -37,6 +39,27 @@ public class OrderService {
             );
         }
 
-        return null;
+        orderProducer.sendOrderConfirmation(
+                new OrderConfirmation(
+                    request.reference(),
+                        request.amount(),
+                        request.paymentMethod(),
+                        customer,
+                        purchaseProducts
+        ));
+
+        return order.getId();
+    }
+
+    public List<OrderResponse> findAll() {
+        return orderRepository.findAll().stream()
+                .map(orderMapper::fromOrder)
+                .toList();
+    }
+
+    public OrderResponse findById(Integer orderId) {
+        return orderRepository.findById(orderId)
+                .map(orderMapper::fromOrder)
+                .orElseThrow(() -> new EntityNotFoundException("No order found with the provider id: " + orderId));
     }
 }
