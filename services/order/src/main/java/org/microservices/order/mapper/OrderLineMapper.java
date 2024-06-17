@@ -1,6 +1,7 @@
 package org.microservices.order.mapper;
 
 import org.microservices.order.DTO.OrderLineRequest;
+import org.microservices.order.DTO.OrderLineResponse;
 import org.microservices.order.entities.Order;
 import org.microservices.order.entities.OrderLine;
 import org.springframework.stereotype.Component;
@@ -17,5 +18,9 @@ public class OrderLineMapper {
                         .build())
                 .productId(request.productId())
                 .build();
+    }
+
+    public OrderLineResponse toOrderLineResponse(OrderLine orderLine) {
+       return  new OrderLineResponse(orderLine.getId(), orderLine.getQuantity());
     }
 }
