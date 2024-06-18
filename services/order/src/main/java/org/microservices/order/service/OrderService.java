@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.microservices.order.DTO.*;
 import org.microservices.order.clients.CustomerClient;
+import org.microservices.order.clients.PaymentClient;
 import org.microservices.order.clients.ProductClient;
 import org.microservices.order.entities.Order;
 import org.microservices.order.exception.BusinessException;
@@ -24,6 +25,7 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final OrderLineService orderLineService;
     private final OrderProducer orderProducer;
+    private final PaymentClient paymentClient;
 
     public Integer createdOrder(OrderRequest request) {
         CustomerResponse customer = this.customerClient.findCustomerById(request.customerId())
@@ -47,6 +49,15 @@ public class OrderService {
                         customer,
                         purchaseProducts
         ));
+
+        PaymentRequest paymentRequest = new PaymentRequest(
+                request.amount(),
+                request.paymentMethod(),
+                order.getId(),
+                order.getReference(),
+                customer
+        );
+        paymentClient.requestOrderPayment(paymentRequest);
 
         return order.getId();
     }
