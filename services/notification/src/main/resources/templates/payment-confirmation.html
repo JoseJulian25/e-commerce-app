@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Confirmation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            padding: 10px 0;
+            border-bottom: 2px solid #4CAF50;
+        }
+        .header h1 {
+            margin: 0;
+            color: #4CAF50;
+        }
+        .content {
+            padding: 20px 0;
+            text-align: center;
+        }
+        .content p {
+            margin: 10px 0;
+            color: #555555;
+        }
+        .content .highlight {
+            font-weight: bold;
+            color: #333333;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px 0;
+            border-top: 1px solid #e0e0e0;
+            font-size: 0.9em;
+            color: #777777;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            color: #ffffff;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Payment Confirmation</h1>
+    </div>
+    <div class="content">
+        <p>Hello, <span class="highlight" th:text="${customerName}">[Customer Name]</span>,</p>
+        <p>We are pleased to inform you that we have received your payment of <span class="highlight" th:text="${amount}">[Amount]</span>.</p>
+        <p>Your order reference: <span class="highlight" th:text="${orderReference}">[Order Reference]</span>.</p>
+        <p>Thank you for your purchase. We hope to see you again soon.</p>
+        <a href="#" class="button">View Your Order Details</a>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Jose Julian Martinez. All rights reserved.</p>
+    </div>
+</div>
+</body>
+</html>
+
