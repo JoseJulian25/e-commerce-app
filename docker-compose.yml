@@ -89,6 +89,14 @@ services:
     networks:
       microservices-net:
 
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411
+    networks:
+      microservices-net:
+
 networks:
   microservices-net:
     driver: bridge
