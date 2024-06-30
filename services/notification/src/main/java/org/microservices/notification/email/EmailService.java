@@ -43,6 +43,7 @@ public class EmailService {
         messageHelper.setFrom(EMAIL_FROM);
         
         final String templateName = EmailTemplate.PAYMENT_CONFIRMATION.getTemplate();
+
         Map<String, Object> variables = new HashMap<>();
         variables.put("customerName", customerName);
         variables.put("amount", amount);
@@ -55,9 +56,12 @@ public class EmailService {
         try{
             String htmlTemplate = templateEngine.process(templateName, context);
             messageHelper.setText(htmlTemplate, true);
+
             messageHelper.setTo(destinationEmail);
             mailSender.send(mimeMessage);
+
             log.info(String.format("INFO - Email Successfully sent to %s with template %s, ", destinationEmail, templateName));
+
         }catch (MessagingException e){
             log.warn("WARNING - Cannot send email to {}", destinationEmail);
         }
@@ -79,6 +83,7 @@ public class EmailService {
         messageHelper.setFrom(EMAIL_FROM);
 
         final String templateName = EmailTemplate.ORDER_CONFIRMATION.getTemplate();
+
         Map<String, Object> variables = new HashMap<>();
         variables.put("customerName", customerName);
         variables.put("totalAmount", amount);

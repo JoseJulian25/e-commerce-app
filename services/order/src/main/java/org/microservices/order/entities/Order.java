@@ -18,11 +18,14 @@ import java.util.List;
 @Data
 @Builder
 @Entity
+@Table(name = "customer_order")
 @EntityListeners(AuditingEntityListener.class)
 public class Order {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @Column(unique = true,  nullable = false)
     private String reference;
     private BigDecimal totalAmount;
     @Enumerated(EnumType.STRING)

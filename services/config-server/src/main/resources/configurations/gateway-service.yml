@@ -8,7 +8,7 @@ spring:
         - id: customer-service
           uri: lb:http://CUSTOMER-SERVICE
           predicates:
-            - Path=/api/v1/customer/**
+            - Path=/api/v1/customers/**
         - id: order-service
           uri: lb:http://ORDER-SERVICE
           predicates:

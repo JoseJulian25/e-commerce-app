@@ -16,9 +16,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class OrderLine {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @ManyToOne
-    @JoinColumn(name = "order_i")
+    @JoinColumn(name = "order_id")
     private Order order;
     private Integer productId;
     private int quantity;

@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 public class Payment {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private BigDecimal amount;
     @Enumerated(EnumType.STRING)

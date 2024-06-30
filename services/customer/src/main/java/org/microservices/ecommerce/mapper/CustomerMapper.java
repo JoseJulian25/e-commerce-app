@@ -23,7 +23,7 @@ public class CustomerMapper {
                 customer.getId(),
                 customer.getFirstname(),
                 customer.getLastname(),
-                customer.getLastname(),
+                customer.getEmail(),
                 customer.getAddress()
         );
     }
