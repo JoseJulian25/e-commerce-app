@@ -26,5 +26,12 @@ spring:
           predicates:
             - Path=/api/v1/payments/**
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://localhost:9098/realms/microservices"
+          jwk-set-uri: "http://localhost:9098/realms/microservices/protocol/openid-connect/certs"
+
 server:
   port: 8222
