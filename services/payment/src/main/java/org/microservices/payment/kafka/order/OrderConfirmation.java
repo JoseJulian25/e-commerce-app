@@ -1,16 +1,15 @@
-package org.microservices.order.DTO;
+package org.microservices.payment.kafka.order;
 
-import org.microservices.order.entities.PaymentMethod;
+import org.microservices.payment.DTO.Customer;
+import org.microservices.payment.entities.PaymentMethod;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 public record OrderConfirmation(
         Integer orderId,
         String orderReference,
         BigDecimal totalAmount,
         PaymentMethod paymentMethod,
-        CustomerResponse customer,
-        List<PurchaseResponse> products
+        Customer customer
 ) {
 }
