@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: order-service
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+        alphanumeric-ids:
+          enabled: true
+
+  config:
+    import: optional:configserver:http://localhost:8888
+
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+    instances:
+      CustomerClient_findCustomerById:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+        eventConsumerBufferSize: 10
+
+  timelimiter:
+    instances:
+      CustomerClient_findCustomerById:
+        timeout-duration: 10s
+
+
+server:
+  port: 8070
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info,circuitbreakers'
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+
+
+
+
+

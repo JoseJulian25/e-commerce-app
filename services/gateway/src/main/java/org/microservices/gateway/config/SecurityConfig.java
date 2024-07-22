@@ -16,9 +16,9 @@ public class SecurityConfig {
         serverHttpSecurity
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers(HttpMethod.POST, "/api/v1/customers").permitAll()
-                        .pathMatchers(HttpMethod.DELETE, "/api/v1/**").hasRole("admin")
-                        .pathMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
+                        //.pathMatchers(HttpMethod.POST, "/api/v1/customers").permitAll()
+                        //.pathMatchers(HttpMethod.DELETE, "/api/v1/**").hasRole("admin")
+                        //.pathMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
                         .anyExchange().permitAll())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {}));
 
