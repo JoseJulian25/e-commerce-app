@@ -1,0 +1,71 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/order
+    username: root
+    password: jose1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: OrderConfirmation:org.microservices.order.DTO.OrderConfirmation
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+        alphanumeric-ids:
+          enabled: true
+
+application:
+  config:
+    customer-url: http://localhost:8222/api/v1/customers
+    product-url: http://localhost:8222/api/v1/products
+    payment-url: http://localhost:8222/api/v1/payments
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+    instances:
+      customer-service_findCustomerById:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+        eventConsumerBufferSize: 10
+  timelimiter:
+    instances:
+      customer-service_findCustomerById:
+        timeout-duration: 10s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'health,info,circuitbreakers'
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+    ratelimiters:
+      enabled: true
+
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: OrderConfirmation:org.microservices.order.DTO.OrderConfirmation
