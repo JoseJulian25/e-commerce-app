@@ -38,4 +38,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(errors));
     }
 
+    @ExceptionHandler(ServiceUnavailableException.class)
+    public ResponseEntity<String> handle(ServiceUnavailableException exception){
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(exception.getMessage());
+    }
+
 }
