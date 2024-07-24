@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+// El servicio gRPC
+service ProductService {
+  rpc PurchaseProducts (PurchaseProductsRequest) returns (PurchaseProductsResponse);
+}
+
+// Mensaje de solicitud
+message PurchaseProductsRequest {
+  repeated ProductPurchaseRequest products = 1;
+}
+
+// Mensaje de respuesta
+message PurchaseProductsResponse {
+  repeated ProductPurchaseResponse products = 1;
+}
+
+// Mensaje de producto para solicitud
+message ProductPurchaseRequest {
+  int32 productId = 1;
+  int32 quantity = 2;
+}
+
+// Mensaje de producto para respuesta
+message ProductPurchaseResponse {
+  int32 productId = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4;
+  int32 quantity = 5;
+}
