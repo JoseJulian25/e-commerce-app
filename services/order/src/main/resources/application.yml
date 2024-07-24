@@ -18,7 +18,7 @@ resilience4j:
       default:
         register-health-indicator: true
     instances:
-      CustomerClient_findCustomerById:
+      customer-service_findCustomerById:
         slidingWindowSize: 10
         minimumNumberOfCalls: 5
         failureRateThreshold: 50
@@ -28,7 +28,7 @@ resilience4j:
 
   timelimiter:
     instances:
-      CustomerClient_findCustomerById:
+      customer-service_findCustomerById:
         timeout-duration: 10s
 
 
