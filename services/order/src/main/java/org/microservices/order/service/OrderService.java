@@ -21,7 +21,6 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    @Qualifier("org.microservices.order.clients.CustomerClient")
     private final CustomerClient customerClient;
     private final ProductClient productClient;
     private final OrderMapper orderMapper;
