@@ -1,17 +1,13 @@
 package org.microservices.order.service;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.microservices.order.DTO.*;
-import org.microservices.order.clients.CustomerClient;
-import org.microservices.order.clients.ProductClient;
 import org.microservices.order.entities.Order;
-import org.microservices.order.exception.BusinessException;
+import org.microservices.order.grpc.GrpcProductClient;
 import org.microservices.order.kafka.OrderProducer;
 import org.microservices.order.mapper.OrderMapper;
 import org.microservices.order.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,18 +17,17 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final CustomerClient customerClient;
-    private final ProductClient productClient;
     private final OrderMapper orderMapper;
     private final OrderLineService orderLineService;
     private final OrderProducer orderProducer;
+    private final GrpcProductClient productClientGrpc;
 
 
     public Integer createdOrder(OrderRequest request) {
-        CustomerResponse customer = this.customerClient.findCustomerById(request.customerId())
-                .orElseThrow(() -> new BusinessException("No customer exists with the provide id: " + request.customerId()));
+        CustomerResponse customer = new CustomerResponse(
+                "66904ee301c1e50c0481a444", "Jose Julian", "Martinez", "jose.julianm2505@gmail.com");
 
-        List<PurchaseResponse> purchaseProducts =  this.productClient.purchaseProducts(request.products());
+        List<PurchaseResponse> purchaseProducts =  this.productClientGrpc.purchaseProducts(request.products());
 
         Order order = this.orderRepository.save(orderMapper.toOrder(request));
 
@@ -52,7 +47,7 @@ public class OrderService {
                         purchaseProducts
         ));
 
-        return order.getId();
+        return 1;
     }
 
     public List<OrderResponse> findAll() {

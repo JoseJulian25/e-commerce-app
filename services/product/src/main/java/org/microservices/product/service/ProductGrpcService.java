@@ -24,6 +24,7 @@ public class ProductGrpcService extends ProductServiceGrpc.ProductServiceImplBas
     @Override
     public void purchaseProducts(PurchaseProductsRequest request,
                                  StreamObserver<PurchaseProductsResponse> responseObserver) {
+        System.out.println("RECIBIENDO INFORMACION GRPC: " + request);
         try {
             List<ProductPurchaseRequest> productRequests = request.getProductsList().stream()
                     .map(protoRequest -> new ProductPurchaseRequest(
