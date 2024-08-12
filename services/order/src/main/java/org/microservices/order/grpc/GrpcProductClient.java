@@ -40,6 +40,8 @@ public class GrpcProductClient {
     private List<PurchaseResponse> callGrpcService(PurchaseProductsRequest grpcRequest){
         System.out.println("Enviando informacion GRPC: " + grpcRequest);
         PurchaseProductsResponse grpcResponse = productServiceStub.purchaseProducts(grpcRequest);
+
+        System.out.println("Recibiendo informacion GRPC:" + grpcResponse);
         return grpcResponse.getProductsList().stream()
                 .map(grpcProduct -> new PurchaseResponse(
                         grpcProduct.getProductId(),

@@ -26,30 +26,63 @@ public class ProductGrpcService extends ProductServiceGrpc.ProductServiceImplBas
                                  StreamObserver<PurchaseProductsResponse> responseObserver) {
         System.out.println("RECIBIENDO INFORMACION GRPC: " + request);
         try {
-            List<ProductPurchaseRequest> productRequests = request.getProductsList().stream()
-                    .map(protoRequest -> new ProductPurchaseRequest(
-                            protoRequest.getProductId(),
-                            protoRequest.getQuantity()
-                    )).collect(Collectors.toList());
+            List<ProductPurchaseResponse> responses = processPurchaseRequest(request);
 
-            List<ProductPurchaseResponse> responses = productService.purchaseProducts(productRequests);
+            PurchaseProductsResponse response = buildPurchaseResponse(responses);
 
-            PurchaseProductsResponse.Builder responseBuilder = PurchaseProductsResponse.newBuilder();
-            for (ProductPurchaseResponse response : responses) {
-                responseBuilder.addProducts(products.ProductPurchaseResponse.newBuilder()
-                        .setProductId(response.productId())
-                        .setName(response.name())
-                        .setDescription(response.description())
-                        .setPrice(response.price())
-                        .setQuantity(response.quantity())
-                        .build());
-            }
-
-            responseObserver.onNext(responseBuilder.build());
-            responseObserver.onCompleted();
+            sendResponse(responseObserver, response);
         } catch (ProductPurchaseException e) {
-            responseObserver.onError(e);
+            handleProductPurchaseException(responseObserver, e);
+        } catch (Exception e) {
+            handleUnknownException(responseObserver, e);
         }
     }
+
+    private List<ProductPurchaseResponse> processPurchaseRequest(PurchaseProductsRequest request) {
+        List<ProductPurchaseRequest> productRequests = request.getProductsList().stream()
+                .map(this::convertToProductPurchaseRequest)
+                .collect(Collectors.toList());
+        return productService.purchaseProducts(productRequests);
+    }
+
+    private ProductPurchaseRequest convertToProductPurchaseRequest(products.ProductPurchaseRequest protoRequest) {
+        return new ProductPurchaseRequest(
+                protoRequest.getProductId(),
+                protoRequest.getQuantity()
+        );
+    }
+
+    private PurchaseProductsResponse buildPurchaseResponse(List<ProductPurchaseResponse> responses) {
+        PurchaseProductsResponse.Builder responseBuilder = PurchaseProductsResponse.newBuilder();
+        responses.forEach(response -> responseBuilder.addProducts(convertToProtoResponse(response)));
+        return responseBuilder.build();
+    }
+
+    private products.ProductPurchaseResponse convertToProtoResponse(ProductPurchaseResponse response) {
+        return products.ProductPurchaseResponse.newBuilder()
+                .setProductId(response.productId())
+                .setName(response.name())
+                .setDescription(response.description())
+                .setPrice(response.price())
+                .setQuantity(response.quantity())
+                .build();
+    }
+
+    private void sendResponse(StreamObserver<PurchaseProductsResponse> responseObserver, PurchaseProductsResponse response) {
+        System.out.println("INFORMACION ENVIADA A ORDER: " + response);
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    private void handleProductPurchaseException(StreamObserver<PurchaseProductsResponse> responseObserver, ProductPurchaseException e) {
+        System.err.println("ERROR AL PROCESAR LA COMPRA: " + e.getMessage());
+        responseObserver.onError(e);
+    }
+
+    private void handleUnknownException(StreamObserver<PurchaseProductsResponse> responseObserver, Exception e) {
+        System.err.println("ERROR DESCONOCIDO: " + e.getMessage());
+        responseObserver.onError(e);
+    }
 }
+
 
