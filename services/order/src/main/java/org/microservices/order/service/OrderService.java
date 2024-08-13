@@ -51,7 +51,7 @@ public class OrderService {
                         purchaseProducts
         ));
 
-        return 1;
+        return order.getId();
     }
 
     public List<OrderResponse> findAll() {

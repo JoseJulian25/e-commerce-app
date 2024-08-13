@@ -12,7 +12,7 @@ import products.PurchaseProductsResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@GrpcService
+@GrpcService(interceptorNames = "traceServerInterceptor")
 public class ProductGrpcService extends ProductServiceGrpc.ProductServiceImplBase {
 
     private final ProductService productService;

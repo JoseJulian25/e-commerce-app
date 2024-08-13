@@ -8,12 +8,10 @@ spring:
 server:
   port: 8070
 
-grpc:
-  client:
-    ProductService:
-      address: static://localhost:9090
-      keep-alive-without-calls: true
-      negotiation-type: plaintext
+management:
+  tracing:
+    sampling:
+      probability: 1.0
 
 
 
