@@ -1,5 +1,6 @@
 package org.microservices.product.service;
 
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.microservices.product.DTO.ProductPurchaseRequest;
@@ -76,7 +77,7 @@ public class ProductGrpcService extends ProductServiceGrpc.ProductServiceImplBas
 
     private void handleProductPurchaseException(StreamObserver<PurchaseProductsResponse> responseObserver, ProductPurchaseException e) {
         System.err.println("ERROR AL PROCESAR LA COMPRA: " + e.getMessage());
-        responseObserver.onError(e);
+        responseObserver.onError(Status.INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
     }
 
     private void handleUnknownException(StreamObserver<PurchaseProductsResponse> responseObserver, Exception e) {
