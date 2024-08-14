@@ -27,7 +27,7 @@ public class Order {
     private Integer id;
     @Column(unique = true,  nullable = false)
     private String reference;
-    private BigDecimal totalAmount;
+    private double totalAmount;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
     private String customerId;

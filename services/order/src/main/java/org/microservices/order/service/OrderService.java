@@ -5,9 +5,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.microservices.order.DTO.*;
 import org.microservices.order.clients.CustomerClient;
-import org.microservices.order.clients.ProductClient;
 import org.microservices.order.entities.Order;
 import org.microservices.order.exception.BusinessException;
+import org.microservices.order.grpc.GrpcProductClient;
 import org.microservices.order.kafka.OrderProducer;
 import org.microservices.order.mapper.OrderMapper;
 import org.microservices.order.repository.OrderRepository;
@@ -15,24 +15,26 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final CustomerClient customerClient;
-    private final ProductClient productClient;
     private final OrderMapper orderMapper;
     private final OrderLineService orderLineService;
     private final OrderProducer orderProducer;
+    private final GrpcProductClient productClientGrpc;
+    private final CustomerClient customerClient;
+
 
 
     public Integer createdOrder(OrderRequest request) {
         CustomerResponse customer = this.customerClient.findCustomerById(request.customerId())
-                .orElseThrow(() -> new BusinessException("No customer exists with the provide id: " + request.customerId()));
+                .orElseThrow(() -> new BusinessException("No customer exists with the provide Id: " + request.customerId()));
 
-        List<PurchaseResponse> purchaseProducts =  this.productClient.purchaseProducts(request.products());
+        List<PurchaseResponse> purchaseProducts =  this.productClientGrpc.purchaseProducts(request.products());
 
         Order order = this.orderRepository.save(orderMapper.toOrder(request));
 
