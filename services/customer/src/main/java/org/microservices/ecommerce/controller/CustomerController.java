@@ -40,7 +40,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<CustomerResponse> findById(@PathVariable String customerId){
+    public ResponseEntity<CustomerResponse> findById(@PathVariable(value = "customerId") String customerId){
         return ResponseEntity.ok(customerService.findById(customerId));
     }
 
