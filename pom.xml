@@ -15,7 +15,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <lombok.version>1.18.30</lombok.version>
-        <spring.cloud.version>2023.0.0</spring.cloud.version> <!-- Asegúrate de que esta línea esté presente -->
+        <spring.cloud.version>2023.0.0</spring.cloud.version>
         <grpc.version>1.45.0</grpc.version>
     </properties>
 
@@ -23,6 +23,10 @@
         <module>services/grpc-proto</module>
         <module>services/product</module>
         <module>services/order</module>
+        <module>services/payment</module>
+        <module>services/notification</module>
+        <module>services/discovery</module>
+        <module>services/customer</module>
     </modules>
 
     <dependencyManagement>
