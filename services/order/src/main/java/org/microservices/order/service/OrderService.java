@@ -1,6 +1,6 @@
 package org.microservices.order.service;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.microservices.order.DTO.*;
@@ -11,11 +11,9 @@ import org.microservices.order.grpc.GrpcProductClient;
 import org.microservices.order.kafka.OrderProducer;
 import org.microservices.order.mapper.OrderMapper;
 import org.microservices.order.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

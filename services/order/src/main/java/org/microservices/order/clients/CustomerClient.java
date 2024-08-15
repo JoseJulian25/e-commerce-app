@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
 
 @Primary
-@FeignClient(name = "customer-service", url = "${application.config.customer-url}", fallback = CustomerClientFallBack.class)
+@FeignClient(name = "customer-service",
+        url = "${application.config.customer-url}",
+        configuration = {CustomErrorDecoder.class})
 public interface CustomerClient {
 
     @GetMapping("/{customerId}")
