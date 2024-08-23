@@ -6,6 +6,7 @@ import org.microservices.product.DTO.ProductPurchaseRequest;
 import org.microservices.product.DTO.ProductPurchaseResponse;
 import org.microservices.product.DTO.ProductRequest;
 import org.microservices.product.DTO.ProductResponse;
+import org.microservices.product.entities.Product;
 import org.microservices.product.service.ProductService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

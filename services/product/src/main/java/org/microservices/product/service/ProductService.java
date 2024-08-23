@@ -10,6 +10,9 @@ import org.microservices.product.entities.Product;
 import org.microservices.product.exception.ProductPurchaseException;
 import org.microservices.product.mapper.ProductMapper;
 import org.microservices.product.repository.ProductRepository;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +22,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "products")
 public class ProductService {
 
     private final ProductRepository repository;
     private final ProductMapper mapper;
+    private final CacheService cacheService;
 
     public Integer createProduct(ProductRequest productRequest) {
         var product = mapper.toProduct(productRequest);
@@ -35,14 +40,17 @@ public class ProductService {
         return processPurchaseRequests(requests, storedProducts);
     }
 
+    @Cacheable(key = "#productId")
     public ProductResponse findById(Integer productId) {
+        System.out.println("Se busco en la base de datos");
         return repository.findById(productId)
                 .map(mapper::toProductResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with the ID: " + productId));
     }
 
-
+    @Cacheable(key = "'all'")
     public List<ProductResponse> findAll() {
+        System.out.println("Se busco en la base de datos");
         return repository.findAll().stream()
                 .map(mapper::toProductResponse)
                 .toList();
@@ -93,5 +101,9 @@ public class ProductService {
         int newAvailableQuantity = product.getAvailableQuantity() - request.quantity();
         product.setAvailableQuantity(newAvailableQuantity);
         repository.save(product);
+
+        cacheService.updateProductCache(product.getId(), mapper.toProductResponse(product));
+        cacheService.evictAllProductsCache();
     }
+
 }
