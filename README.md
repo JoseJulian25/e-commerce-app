@@ -43,7 +43,8 @@ In the development of this project, a series of key practices and technologies h
 - Docker
 
 ## Architecture Diagram
-![E-commerce diagram drawio](https://github.com/user-attachments/assets/ee5a8f6a-e349-4fd8-a56d-9f6bb5fc3ba0)
+![E-commerce diagram drawio](https://github.com/user-attachments/assets/4bbfe014-d872-4185-a0b7-adfad54082d0)
+
 
 ### Microservices Interaction When Placing an Order:
 When a customer places an order in the application, a series of interactions are triggered between various microservices to ensure the correct execution of the entire process. The communication flow between microservices is described below:
